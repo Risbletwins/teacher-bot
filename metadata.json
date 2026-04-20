@@ -1,0 +1,8 @@
+{
+  "name": "Teacher Bot",
+  "description": "An AI-powered teacher specifically designed for students in Bangladesh, providing instant, TTS-friendly answers based on the NCTB curriculum.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}
