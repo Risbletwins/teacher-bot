@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 
 // BUG FIX: Use VITE_ prefix so Vite exposes env vars to the browser bundle
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || '';
+const apiKey = process.env.GEMINI_API_KEY || '';
 
 const ai = new GoogleGenAI({ apiKey });
 
@@ -24,8 +24,7 @@ export async function askGuru(
   history: { role: 'user' | 'model'; parts: { text: string }[] }[] = []
 ) {
   try {
-    // BUG FIX: 'gemini-3-flash-preview' does not exist — corrected to valid model name
-    const model = 'gemini-2.0-flash';
+    const model = 'gemini-3-flash-preview';
 
     const languageInstruction =
       language === 'bn'
@@ -54,9 +53,8 @@ export async function askGuru(
 export async function generateTTS(text: string, language: 'en' | 'bn') {
   try {
     const langCode = language === 'bn' ? 'Bangla' : 'English';
-    // BUG FIX: 'gemini-3.1-flash-tts-preview' does not exist — corrected to valid TTS model
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-preview-tts',
+      model: 'gemini-3.1-flash-tts-preview',
       contents: [
         {
           parts: [

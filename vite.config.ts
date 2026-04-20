@@ -1,18 +1,19 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import {defineConfig, loadEnv} from 'vite';
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({mode}) => {
   const env = loadEnv(mode, '.', '');
   return {
     plugins: [react(), tailwindcss()],
     define: {
-      // BUG FIX: Support both VITE_GEMINI_API_KEY (standard) and legacy GEMINI_API_KEY
-      // VITE_ prefix is the correct Vite pattern — it's automatically exposed without define()
-      // The define below keeps backward compatibility if someone sets GEMINI_API_KEY instead
+      // loadEnv() reads from .env files — but on Netlify/Render there is no .env file.
+      // Those platforms inject secrets as real Node.js process.env vars at build time.
+      // So we try loadEnv first (works in AI Studio & local dev), then fall back to
+      // process.env (works on Netlify, Render, and any CI/CD platform).
       'process.env.GEMINI_API_KEY': JSON.stringify(
-        env.VITE_GEMINI_API_KEY || env.GEMINI_API_KEY || ''
+        env.GEMINI_API_KEY || process.env.GEMINI_API_KEY || ''
       ),
     },
     resolve: {
